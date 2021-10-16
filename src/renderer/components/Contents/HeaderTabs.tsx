@@ -3,18 +3,20 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import TabPanel from 'renderer/components/Contents/TabPanel';
+import { useAtom } from 'jotai';
+import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
 
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  'aria-controls': `simple-tabpanel-${index}`,
+const a11yProps = (id: number) => ({
+  id: `simple-tab-${id}`,
+  'aria-controls': `simple-tabpanel-${id}`,
 });
 
 const HeaderTabs = () => {
-  const [value, setValue] = React.useState(0);
+  const [tabs] = useAtom(tabsAtom);
+  const [tabId, setTabId] = useAtom(tabIdAtom);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log(event);
-    setValue(newValue);
+  const handleChange = (id: number) => {
+    setTabId(id);
   };
 
   return (
@@ -28,25 +30,26 @@ const HeaderTabs = () => {
     >
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
-          value={value}
-          onChange={handleChange}
+          value={tabId}
+          onChange={(_event, id) => handleChange(id)}
           aria-label="basic tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.id}
+              label={tab.name}
+              value={tab.id}
+              {...a11yProps(tab.id)}
+            />
+          ))}
         </Tabs>
       </Box>
       <Box>
-        <TabPanel value={value} index={0}>
-          Item One
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
-        </TabPanel>
+        {tabs.map((tab) => (
+          <TabPanel value={tabId} index={tab.id}>
+            Item {tab.name}
+          </TabPanel>
+        ))}
       </Box>
     </Box>
   );
