@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import TabPanel from 'renderer/components/Contents/TabPanel';
+import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
 import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
 
@@ -32,7 +32,7 @@ const HeaderTabs = () => {
         <Tabs
           value={tabId}
           onChange={(_event, id) => handleChange(id)}
-          aria-label="basic tabs example"
+          scrollButtons="auto"
         >
           {tabs.map((tab) => (
             <Tab

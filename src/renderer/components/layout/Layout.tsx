@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from 'renderer/components/sidebar/Sidebar';
 import { Grid } from '@material-ui/core';
-import HeaderTabs from 'renderer/components/Contents/HeaderTabs';
+import HeaderTabs from 'renderer/components/contents/HeaderTabs';
 
 const Layout = () => (
   <Grid container sx={{ height: '100%' }}>
