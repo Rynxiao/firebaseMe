@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
 import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
+import SearchFrom from './SearchForm';
 
 const a11yProps = (id: number) => ({
   id: `simple-tab-${id}`,
@@ -46,9 +47,11 @@ const HeaderTabs = () => {
       </Box>
       <Box>
         {tabs.map((tab) => (
-          <TabPanel value={tabId} index={tab.id}>
-            Item {tab.name}
-          </TabPanel>
+          <Box component="div" key={tab.id}>
+            <TabPanel value={tabId} index={tab.id}>
+              <SearchFrom defaultValue={tab.name} />
+            </TabPanel>
+          </Box>
         ))}
       </Box>
     </Box>
