@@ -6,6 +6,7 @@ import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
 import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
 import SearchFrom from './SearchForm';
+import { entitiesMapAtom } from 'renderer/states/entities';
 
 const a11yProps = (id: number) => ({
   id: `simple-tab-${id}`,
@@ -15,6 +16,9 @@ const a11yProps = (id: number) => ({
 const HeaderTabs = () => {
   const [tabs] = useAtom(tabsAtom);
   const [tabId, setTabId] = useAtom(tabIdAtom);
+  const [map] = useAtom(entitiesMapAtom);
+
+  console.log('map', map);
 
   const handleChange = (id: number) => {
     setTabId(id);

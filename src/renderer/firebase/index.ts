@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
+import { FirebaseError, initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { Indentity } from 'renderer/states/types';
+import { Indentity, Response } from 'renderer/states/types';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBGLW2Er3TfIIBk_PSuXM6gk72Z1FidKJM',
@@ -20,14 +20,19 @@ const db = getFirestore(app);
 
 export const getCollection = async <T extends Indentity>(
   collectionName: string
-) => {
-  const col = collection(db, collectionName);
-  const snapshots = await getDocs(col);
-  const list = snapshots.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as T[];
-  return list;
+): Promise<Response<T[]>> => {
+  try {
+    const col = collection(db, collectionName);
+    const snapshots = await getDocs(col);
+    const list = snapshots.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as T[];
+    return { loading: false, data: list };
+  } catch (error) {
+    const { message } = error as FirebaseError;
+    return { loading: false, data: [], error: message };
+  }
 };
 
 export default app;

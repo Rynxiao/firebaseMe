@@ -4,7 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import { Button, Grid, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { getCollection } from 'renderer/firebase';
-import { User } from 'renderer/states/types';
+import { Entity } from 'renderer/states/types';
+import { useAtom } from 'jotai';
+import { addEntityListAtom } from 'renderer/states/entities';
+import { toast } from 'react-toastify';
 
 export interface SearchFormProps {
   defaultValue: string;
@@ -12,25 +15,21 @@ export interface SearchFormProps {
 
 const SearchFrom = (props: SearchFormProps) => {
   const { defaultValue } = props;
-  const pathRef = React.useRef(null);
-  const [data, setData] = React.useState<User[]>([]);
+  const [path, setPath] = React.useState(defaultValue);
+  const [, addEntityList] = useAtom(addEntityListAtom);
 
-  const handleSearch = async () => {
-    if (pathRef.current) {
-      const pathInput = (pathRef.current as HTMLDivElement).querySelector(
-        '#path'
-      ) as HTMLInputElement;
-
-      if (pathInput) {
-        const path = pathInput.value;
-        console.log(path);
-        const users = await getCollection<User>('user');
-        setData(users);
-      }
-    }
+  const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPath(event.target.value);
   };
 
-  console.log('data', data);
+  const handleSearch = async () => {
+    const { error, data } = await getCollection<Entity>(path);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    addEntityList({ key: path, list: data });
+  };
 
   return (
     <Paper>
@@ -38,13 +37,12 @@ const SearchFrom = (props: SearchFormProps) => {
         <Grid container>
           <Grid item xs={10}>
             <TextField
-              ref={pathRef}
-              id="path"
               fullWidth
               label="Path"
               size="small"
               margin="dense"
-              defaultValue={defaultValue}
+              value={path}
+              onChange={handlePathChange}
             />
           </Grid>
           <Grid item xs={1}>
