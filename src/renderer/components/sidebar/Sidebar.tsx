@@ -6,12 +6,12 @@ import {
   ListItemText,
   Collapse,
   Box,
-} from '@material-ui/core';
+} from '@mui/material';
 import React, { useEffect } from 'react';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collections from '@material-ui/icons/Collections';
-import ListIcon from '@material-ui/icons/List';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collections from '@mui/icons-material/Collections';
+import ListIcon from '@mui/icons-material/List';
 import { useAtom } from 'jotai';
 import projectAtom from 'renderer/states/projects';
 import { get } from 'lodash';
