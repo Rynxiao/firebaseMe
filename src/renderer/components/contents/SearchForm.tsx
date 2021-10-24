@@ -3,11 +3,7 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { getCollection } from 'renderer/firebase';
-import { Entity } from 'renderer/states/types';
-import { useAtom } from 'jotai';
-import { addEntityListAtom } from 'renderer/states/entities';
-import { toast } from 'react-toastify';
+import useFetchCollection from 'renderer/hooks/useFetchCollection';
 
 export interface SearchFormProps {
   defaultValue: string;
@@ -16,19 +12,14 @@ export interface SearchFormProps {
 const SearchFrom = (props: SearchFormProps) => {
   const { defaultValue } = props;
   const [path, setPath] = React.useState(defaultValue);
-  const [, addEntityList] = useAtom(addEntityListAtom);
+  const fetchCollection = useFetchCollection(path);
 
   const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPath(event.target.value);
   };
 
   const handleSearch = async () => {
-    const { error, data } = await getCollection<Entity>(path);
-    if (error) {
-      toast.error(error);
-      return;
-    }
-    addEntityList({ key: path, list: data });
+    await fetchCollection();
   };
 
   return (

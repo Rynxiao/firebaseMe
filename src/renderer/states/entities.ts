@@ -8,9 +8,9 @@ export const addEntityListAtom = atom<Entites, EntitiesItem>(
   (get) => get(entitiesMapAtom),
   (get, set, entitiesItem) => {
     const entitiesMap = get(entitiesMapAtom);
-    const { key, list } = entitiesItem;
+    const { key, data } = entitiesItem;
     const newMap = produce(entitiesMap, (draft) => {
-      draft[key] = list;
+      draft[key] = data;
       return draft;
     });
 

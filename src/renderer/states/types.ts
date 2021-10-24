@@ -23,18 +23,17 @@ export interface Entity extends Indentity {
 
 export type EntityList = Entity[];
 
-// { users: [{ id: 1, name: 'user1' }], hobbies: [{ id: 1, name: 'football' }] }
-
-export interface EntitiesItem {
-  key: string;
-  list: EntityList;
-}
-export interface Entites {
-  [key: string]: EntityList;
-}
-
+// { users: [{ id: 1, name: 'user1' }], hobbies: [{ id: 1, name: 'football' }]
 export interface Response<T> {
   loading: boolean;
   data: T;
   error?: string;
+}
+
+export interface Entites {
+  [key: string]: Response<EntityList>;
+}
+export interface EntitiesItem {
+  key: string;
+  data: Response<EntityList>;
 }
