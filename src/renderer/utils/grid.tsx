@@ -5,11 +5,8 @@ import {
   get,
   keys,
   camelCase,
-  capitalize,
-  isString,
+  upperFirst,
   isNumber,
-  some,
-  includes,
   isDate,
 } from 'lodash';
 import {
@@ -34,34 +31,25 @@ const deleteCol = {
   ],
 } as GridColDef;
 
-const matchedTimestampKeys = ['updated', 'time', 'timestamp', 'created'];
-
-const isTimestamp = (key: string) => {
-  return some(matchedTimestampKeys, (matched) => includes(matched, key));
-};
-
 const ID = 'id';
-const getType = (key: string, value: any) => {
-  switch (value) {
-    case isDate(value):
-      return 'date';
-    case isTimestamp(key):
-      return 'dateTime';
-    case isNumber(value):
-      return 'number';
-    case isString(value):
-      return 'string';
-    default:
-      return 'string';
+const getType = (value: any) => {
+  if (isDate(value)) {
+    return 'date';
   }
+
+  if (isNumber(value)) {
+    return 'number';
+  }
+
+  return 'string';
 };
 
 const generateCol = (key: string, value: any) => {
   const col = {
     field: key,
-    headerName: capitalize(camelCase(key)),
+    headerName: upperFirst(camelCase(key)),
     minWidth: 150,
-    type: getType(key, value),
+    type: getType(value),
   } as GridColDef;
 
   if (key === ID) {
