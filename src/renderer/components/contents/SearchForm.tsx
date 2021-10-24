@@ -3,23 +3,18 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import useFetchCollection from 'renderer/hooks/useFetchCollection';
 
 export interface SearchFormProps {
-  defaultValue: string;
+  defaultPath: string;
+  onSearch: (path: string) => void;
 }
 
 const SearchFrom = (props: SearchFormProps) => {
-  const { defaultValue } = props;
+  const { defaultPath: defaultValue, onSearch } = props;
   const [path, setPath] = React.useState(defaultValue);
-  const fetchCollection = useFetchCollection(path);
 
   const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPath(event.target.value);
-  };
-
-  const handleSearch = async () => {
-    await fetchCollection();
   };
 
   return (
@@ -50,7 +45,7 @@ const SearchFrom = (props: SearchFormProps) => {
               <Button
                 variant="contained"
                 endIcon={<SearchIcon />}
-                onClick={handleSearch}
+                onClick={() => onSearch(path)}
               >
                 Search
               </Button>

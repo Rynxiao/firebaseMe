@@ -24,16 +24,16 @@ export interface Entity extends Indentity {
 export type EntityList = Entity[];
 
 // { users: [{ id: 1, name: 'user1' }], hobbies: [{ id: 1, name: 'football' }]
-export interface Response<T> {
+export interface ResponseData<T> {
   loading: boolean;
   data: T;
   error?: string;
 }
 
 export interface Entites {
-  [key: string]: Response<EntityList>;
+  [key: string]: ResponseData<EntityList>;
 }
 export interface EntitiesItem {
   key: string;
-  data: Response<EntityList>;
+  data: ResponseData<EntityList>;
 }

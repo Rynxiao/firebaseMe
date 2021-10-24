@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { Indentity, Response } from 'renderer/states/types';
+import { Indentity, ResponseData } from 'renderer/states/types';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBGLW2Er3TfIIBk_PSuXM6gk72Z1FidKJM',
@@ -20,7 +20,7 @@ const db = getFirestore(app);
 
 export const getCollection = async <T extends Indentity>(
   collectionName: string
-): Promise<Response<T[]>> => {
+): Promise<ResponseData<T[]>> => {
   try {
     const col = collection(db, collectionName);
     const snapshots = await getDocs(col);

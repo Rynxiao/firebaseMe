@@ -1,26 +1,27 @@
-import { useAtom } from 'jotai';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { getCollection } from 'renderer/firebase';
-import { addEntityListAtom } from 'renderer/states/entities';
 import { toast } from 'react-toastify';
-import { Entity } from 'renderer/states/types';
+import { Entity, ResponseData } from 'renderer/states/types';
 
-const useFetchCollection = (collectionName: string) => {
-  const [, addEntityList] = useAtom(addEntityListAtom);
+const INITIAL_RESPONSE: ResponseData<Entity[]> = { loading: false, data: [] };
 
-  const fetchCollection = useCallback(() => {
-    addEntityList({ key: collectionName, data: { loading: true, data: [] } });
-    return getCollection<Entity>(collectionName).then((response) => {
-      if (response.error) {
-        toast.error(response.error);
-        return response;
+const useFetchCollection = () => {
+  const [response, setResponse] =
+    useState<ResponseData<Entity[]>>(INITIAL_RESPONSE);
+
+  const fetchCollection = useCallback((collectionName: string) => {
+    setResponse({ loading: true, data: [] });
+    return getCollection<Entity>(collectionName).then((res) => {
+      if (res.error) {
+        toast.error(res.error);
+        return res;
       }
-      addEntityList({ key: collectionName, data: response });
-      return response;
+      setResponse(res);
+      return res;
     });
-  }, [addEntityList, collectionName]);
+  }, []);
 
-  return fetchCollection;
+  return { response, fetchCollection };
 };
 
 export default useFetchCollection;

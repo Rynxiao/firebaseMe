@@ -5,8 +5,8 @@ import Box from '@material-ui/core/Box';
 import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
 import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
+import useFetchCollection from 'renderer/hooks/useFetchCollection';
 import SearchFrom from './SearchForm';
-import { entitiesMapAtom } from 'renderer/states/entities';
 
 const a11yProps = (id: number) => ({
   id: `simple-tab-${id}`,
@@ -16,13 +16,17 @@ const a11yProps = (id: number) => ({
 const HeaderTabs = () => {
   const [tabs] = useAtom(tabsAtom);
   const [tabId, setTabId] = useAtom(tabIdAtom);
-  const [map] = useAtom(entitiesMapAtom);
-
-  console.log('map', map);
+  const { response, fetchCollection } = useFetchCollection();
 
   const handleChange = (id: number) => {
     setTabId(id);
   };
+
+  const handleFormSearch = async (searchPath: string) => {
+    await fetchCollection(searchPath);
+  };
+
+  console.log(response);
 
   return (
     <Box
@@ -52,8 +56,8 @@ const HeaderTabs = () => {
       <Box>
         {tabs.map((tab) => (
           <Box component="div" key={tab.id}>
-            <TabPanel value={tabId} index={tab.id}>
-              <SearchFrom defaultValue={tab.name} />
+            <TabPanel selectedTabId={tabId} tabId={tab.id}>
+              <SearchFrom defaultPath={tab.name} onSearch={handleFormSearch} />
             </TabPanel>
           </Box>
         ))}

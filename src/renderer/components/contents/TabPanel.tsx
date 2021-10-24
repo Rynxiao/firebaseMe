@@ -3,23 +3,23 @@ import * as React from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  index: number;
-  value: number;
+  tabId: number;
+  selectedTabId: number;
 }
 
 const TabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
+  const { children, selectedTabId, tabId, ...other } = props;
 
   return (
     <Box
       sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
       role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      hidden={selectedTabId !== tabId}
+      id={`simple-tabpanel-${tabId}`}
+      aria-labelledby={`simple-tab-${tabId}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {selectedTabId === tabId && <Box sx={{ p: 3 }}>{children}</Box>}
     </Box>
   );
 };
