@@ -6,12 +6,9 @@ import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
 import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
 import useFetchCollection from 'renderer/hooks/useFetchCollection';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { generateGridColumns } from 'renderer/utils/grid';
 import SearchFrom from './SearchForm';
-
-const a11yProps = (id: number) => ({
-  id: `simple-tab-${id}`,
-  'aria-controls': `simple-tabpanel-${id}`,
-});
 
 const HeaderTabs = () => {
   const [tabs] = useAtom(tabsAtom);
@@ -26,7 +23,9 @@ const HeaderTabs = () => {
     await fetchCollection(searchPath);
   };
 
-  console.log(response);
+  const columns = generateGridColumns(response.data);
+  console.log(response.data);
+  console.log('columns', columns);
 
   return (
     <Box
@@ -44,12 +43,7 @@ const HeaderTabs = () => {
           scrollButtons="auto"
         >
           {tabs.map((tab) => (
-            <Tab
-              key={tab.id}
-              label={tab.name}
-              value={tab.id}
-              {...a11yProps(tab.id)}
-            />
+            <Tab key={tab.id} label={tab.name} value={tab.id} />
           ))}
         </Tabs>
       </Box>
@@ -58,6 +52,18 @@ const HeaderTabs = () => {
           <Box component="div" key={tab.id}>
             <TabPanel selectedTabId={tabId} tabId={tab.id}>
               <SearchFrom defaultPath={tab.name} onSearch={handleFormSearch} />
+              <Box style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                  rows={response.data}
+                  columns={columns}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  disableSelectionOnClick
+                  components={{
+                    Toolbar: GridToolbar,
+                  }}
+                />
+              </Box>
             </TabPanel>
           </Box>
         ))}
