@@ -3969,6 +3969,11 @@ detect-port@^1.3.0:
     address "^1.0.1"
     debug "^2.6.0"
 
+dialog-polyfill@^0.4.7:
+  version "0.4.10"
+  resolved "https://registry.nlark.com/dialog-polyfill/download/dialog-polyfill-0.4.10.tgz#c4ea68a0deed4abb59a6a2a025c548b278cd532e"
+  integrity sha1-xOpooN7tSrtZpqKgJcVIsnjNUy4=
+
 dicer@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npm.taobao.org/dicer/download/dicer-0.3.0.tgz#eacd98b3bfbf92e8ab5c2fdb71aaac44bb06b872"
@@ -5245,6 +5250,14 @@ firebase@^9.1.3:
     "@firebase/storage" "0.8.4"
     "@firebase/storage-compat" "0.1.4"
     "@firebase/util" "1.4.0"
+
+firebaseui@4.8.1:
+  version "4.8.1"
+  resolved "https://registry.npmmirror.com/firebaseui/download/firebaseui-4.8.1.tgz#29ccbc9dfd579c4453725f88e9cf81c8ea62c580"
+  integrity sha1-Kcy8nf1XnERTcl+I6c+ByOpixYA=
+  dependencies:
+    dialog-polyfill "^0.4.7"
+    material-design-lite "^1.2.0"
 
 flat-cache@^3.0.4:
   version "3.0.4"
@@ -7588,6 +7601,11 @@ matcher@^3.0.0:
   integrity sha1-vZBg9MW3CqgEHMxvgDaHYJlPMMo=
   dependencies:
     escape-string-regexp "^4.0.0"
+
+material-design-lite@^1.2.0:
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/material-design-lite/download/material-design-lite-1.3.0.tgz#d004ce3fee99a1eeb74a78b8a325134a5f1171d3"
+  integrity sha1-0ATOP+6Zoe63Sni4oyUTSl8RcdM=
 
 mdn-data@2.0.14:
   version "2.0.14"

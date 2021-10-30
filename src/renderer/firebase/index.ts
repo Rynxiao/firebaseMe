@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { Indentity, ResponseData } from 'renderer/states/types';
