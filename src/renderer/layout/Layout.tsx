@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import HeaderTabs from 'renderer/components/contents/HeaderTabs';
 
 const Layout = () => (
-  <Grid container sx={{ height: '100%' }}>
+  <Grid container sx={{ height: 1 }}>
     <Grid item xs={2} sx={{ borderRight: 1, borderColor: 'divider' }}>
       <Sidebar />
     </Grid>

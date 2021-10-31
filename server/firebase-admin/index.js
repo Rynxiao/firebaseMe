@@ -1,17 +1,38 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://myfirebase-1c0da-default-rtdb.firebaseio.com',
-});
+const getDatabase = (serviceAccountKey, isDefault) => {
+  const projectId = serviceAccountKey.project_id;
+  const config = {
+    credential: admin.credential.cert(serviceAccountKey),
+    databaseURL: `https://${projectId}-default-rtdb.firebaseio.com`,
+  };
 
-const db = admin.firestore();
-
-const listCollections = async () => {
-  const snapshots = await db.listCollections();
-  snapshots.forEach((snapshot) => console.log(snapshot.path));
+  if (isDefault) {
+    admin.initializeApp(config);
+  } else {
+    admin.initializeApp(config, projectId);
+  }
+  return admin.firestore();
 };
+
+const listCollections = async (serviceAccountKey, isDefault) => {
+  try {
+    const db = getDatabase(serviceAccountKey, isDefault);
+    const snapshots = await db.listCollections();
+    const collections = snapshots.map((snapshot) => {
+      const { id, path } = snapshot;
+      return { id, path };
+    });
+
+    return collections;
+  } catch (error) {
+    console.log('list collections error', error);
+    return null;
+  }
+};
+
+listCollections();
 
 module.exports = {
   listCollections,

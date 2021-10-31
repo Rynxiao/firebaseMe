@@ -14,6 +14,7 @@ import {
   setLoginClickedStatus,
 } from 'renderer/firebase/auth';
 import CircularProgress from '@mui/material/CircularProgress';
+import { grey } from '@mui/material/colors';
 
 const Login = () => {
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,7 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: grey['300'],
       }}
     >
       {!userLogged && !clicked ? (

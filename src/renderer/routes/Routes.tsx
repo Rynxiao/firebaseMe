@@ -6,8 +6,8 @@ import Login from 'renderer/layout/Login';
 const Routes = () => (
   <Router>
     <Switch>
-      <Route path="/" component={Login} />
-      <Route path="/mian" component={Layout} />
+      <Route path="/login" component={Login} />
+      <Route path="/" component={Layout} />
     </Switch>
   </Router>
 );
