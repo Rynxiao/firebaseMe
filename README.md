@@ -32,6 +32,8 @@ See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/in
 
 ## Deploy
 
+[get started with heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs?singlepage=true)
+
 ```shell
 heroku login
 
@@ -43,4 +45,11 @@ heroku ps:scale web=1
 
 # logs
 heroku logs --tail
+
+# open app
+heroku open
 ```
+
+### Links
+
+- [Renaming Apps from the CLI](https://devcenter.heroku.com/articles/renaming-apps#updating-git-remotes)
