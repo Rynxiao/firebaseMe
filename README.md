@@ -35,5 +35,12 @@ See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/in
 ```shell
 heroku login
 
+# push & deploy
 git subtree push --prefix server heroku main
+
+# scale
+heroku ps:scale web=1
+
+# logs
+heroku logs --tail
 ```
