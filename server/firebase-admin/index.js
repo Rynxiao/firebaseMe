@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 const admin = require('firebase-admin');
+const { v4: uuidv4 } = require('uuid');
 
 const getDatabase = (serviceAccountKey, isDefault) => {
   const projectId = serviceAccountKey.project_id;
@@ -20,19 +21,16 @@ const listCollections = async (serviceAccountKey, isDefault) => {
   try {
     const db = getDatabase(serviceAccountKey, isDefault);
     const snapshots = await db.listCollections();
-    const collections = snapshots.map((snapshot) => {
-      const { id, path } = snapshot;
-      return { id, path };
-    });
 
-    return collections;
+    return snapshots.map((snapshot) => {
+      const { path } = snapshot;
+      return { id: uuidv4(), name: path };
+    });
   } catch (error) {
     console.log('list collections error', error);
     return null;
   }
 };
-
-listCollections();
 
 module.exports = {
   listCollections,
