@@ -12,34 +12,29 @@ const accountsPath = path.resolve(root, 'accounts');
 const upload = multer({ dest: accountsPath });
 const router = express.Router();
 
-const uploadAndRename = async (files) => {
+const uploadAndWriteMeta = async (files) => {
   try {
     const metaStr = await fsPromise.readFile(metaPath, { encoding: 'utf8' });
     const meta = JSON.parse(metaStr);
 
     files.forEach(async (file) => {
-      const { filename, originalname } = file;
-      const oldPath = path.resolve(accountsPath, filename);
+      const { filename } = file;
+      const filePath = path.resolve(accountsPath, filename);
 
-      const fileContentStr = await fsPromise.readFile(oldPath, {
+      const fileContentStr = await fsPromise.readFile(filePath, {
         encoding: 'utf8',
       });
       const fileContent = JSON.parse(fileContentStr);
       const index = findIndex(meta, { project_id: fileContent.project_id });
 
       if (index === -1) {
-        const newPath = path.resolve(
-          accountsPath,
-          `${new Date().getTime()}_${originalname}`
-        );
         await fsPromise.writeFile(
           metaPath,
           JSON.stringify(meta.concat(fileContent)),
           { encoding: 'utf8' }
         );
-        await fsPromise.rename(oldPath, newPath);
       } else {
-        await fsPromise.unlink(oldPath);
+        await fsPromise.unlink(filePath);
       }
     });
   } catch (error) {
@@ -49,22 +44,23 @@ const uploadAndRename = async (files) => {
 
 const readServiceAccountKeys = async () => {
   try {
-    const files = await fsPromise.readdir(accountsPath);
-    const filesContent = files.map(async (file) => {
-      const filePath = path.resolve(accountsPath, file);
-      const result = await fsPromise.readFile(filePath, { encoding: 'utf8' });
-      return JSON.parse(result);
+    const accountMetaStr = await fsPromise.readFile(metaPath, {
+      encoding: 'utf8',
     });
-    return filesContent;
+    return JSON.parse(accountMetaStr);
   } catch (error) {
     console.log('read files error', error);
     return null;
   }
 };
 
-router.get('/', async (req, res) => {
-  const accountsPromises = await readServiceAccountKeys();
-  const accounts = await Promise.all(accountsPromises);
+router.get('/test', async (req, res) => {
+  await uploadAndWriteMeta([{ filename: 'SCBKgwggSkAgEAAoIBAQCjqWovpPWHF' }]);
+  res.json({ code: 200, message: 'oksf' });
+});
+
+router.get('/projects', async (req, res) => {
+  const accounts = await readServiceAccountKeys();
 
   const projectsPromises = accounts.map(async (account, index) => {
     if (account) {
@@ -84,7 +80,7 @@ router.get('/', async (req, res) => {
 router.post('/upload', upload.array('account', 12), async (req, res) => {
   try {
     const { files } = req;
-    await uploadAndRename(files);
+    await uploadAndWriteMeta(files);
     res.json({ code: 200, message: 'Upload service account successfully!' });
     res.end();
   } catch (error) {
