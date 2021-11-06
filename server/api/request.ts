@@ -4,7 +4,7 @@ const baseURL = 'http://localhost:3000/api/';
 
 const instance = axios.create({
   baseURL,
-  timeout: 1000,
+  // timeout: 5000,
 });
 
 const request = <T = any, R = AxiosResponse<T>, D = any>(

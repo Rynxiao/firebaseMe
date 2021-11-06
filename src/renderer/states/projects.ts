@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { getProjects } from '../../../server/api';
-import { Project } from './types';
+import { Project, ResponseData } from './types';
 
 // const mockedProjects = [
 //   {
@@ -45,14 +45,15 @@ import { Project } from './types';
 //   },
 // ];
 
-const projectAtom = atom<Project[]>([]);
+const projectAtom = atom<ResponseData<Project[]>>({ loading: false, data: [] });
 
-export const fetchProjectAtom = atom<Project[], undefined>(
+export const fetchProjectAtom = atom<ResponseData<Project[]>, undefined>(
   (get) => get(projectAtom),
   async (_get, set) => {
+    set(projectAtom, { loading: true, data: [] });
     const response = await getProjects();
     const projects = response.data.data;
-    set(projectAtom, projects);
+    set(projectAtom, { loading: false, data: projects });
   }
 );
 

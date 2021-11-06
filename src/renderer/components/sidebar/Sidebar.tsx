@@ -7,6 +7,8 @@ import {
   Collapse,
   Box,
   Button,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
 import React from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -23,6 +25,7 @@ const Sidebar = () => {
     open,
     setOpen,
     projects,
+    loading,
     setCollectionId,
     addTab,
     setTabId,
@@ -40,72 +43,105 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
-        width: '100%',
-        height: '100%',
-        display: 'grid',
-        gridAutoRows: '1fr 49px 0',
+        width: 1,
+        height: 1,
       }}
     >
       <List
-        sx={{ width: '100%', bgcolor: 'background.paper' }}
-        component="nav"
-        subheader={<ListSubheader component="div">Projects</ListSubheader>}
-      >
-        {projects.map((project) => {
-          const { collections } = project;
-          return (
-            <Box component="div" key={project.id}>
-              <ListItemButton onClick={() => setProjectId(project.id)}>
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText primary={project.project} />
-                {projectId === project.id ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse
-                in={projectId === project.id}
-                timeout="auto"
-                unmountOnExit
-              >
-                {collections &&
-                  collections.map((collection) => (
-                    <List component="div" disablePadding key={collection.id}>
-                      <ListItemButton
-                        sx={{ pl: 4 }}
-                        selected={collectionId === collection.id}
-                        onClick={() =>
-                          handleClickCollection(
-                            collection as unknown as Collection
-                          )
-                        }
-                      >
-                        <ListItemIcon>
-                          <Collections />
-                        </ListItemIcon>
-                        <ListItemText primary={collection.name} />
-                      </ListItemButton>
-                    </List>
-                  ))}
-              </Collapse>
-            </Box>
-          );
-        })}
-      </List>
-      <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          borderTop: 1,
-          borderColor: 'divider',
-          px: 2,
+          width: 1,
+          height: 1,
+          display: 'grid',
+          gridAutoRows: '49px 1fr 49px 0',
+          bgcolor: 'background.paper',
         }}
+        component="nav"
+        subheader={
+          <ListSubheader
+            component="div"
+            sx={{ borderBottom: 1, borderColor: 'divider' }}
+          >
+            Projects
+          </ListSubheader>
+        }
       >
-        <AddIcon />
-        <Button variant="text" onClick={() => setOpen(true)}>
-          New Project
-        </Button>
-      </Box>
-      <UploadForm open={open} setOpen={setOpen} />
+        {loading ? (
+          <Box
+            sx={{
+              width: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mt: 5,
+            }}
+          >
+            <CircularProgress size={20} />
+            <Typography sx={{ mt: 0.25 }}>Loading Projects</Typography>
+          </Box>
+        ) : (
+          <>
+            {projects.map((project) => {
+              const { collections } = project;
+              return (
+                <Box component="div" key={project.id}>
+                  <ListItemButton onClick={() => setProjectId(project.id)}>
+                    <ListItemIcon>
+                      <ListIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={project.project} />
+                    {projectId === project.id ? <ExpandLess /> : <ExpandMore />}
+                  </ListItemButton>
+                  <Collapse
+                    in={projectId === project.id}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    {collections &&
+                      collections.map((collection) => (
+                        <List
+                          component="div"
+                          disablePadding
+                          key={collection.id}
+                        >
+                          <ListItemButton
+                            sx={{ pl: 4 }}
+                            selected={collectionId === collection.id}
+                            onClick={() =>
+                              handleClickCollection(
+                                collection as unknown as Collection
+                              )
+                            }
+                          >
+                            <ListItemIcon>
+                              <Collections />
+                            </ListItemIcon>
+                            <ListItemText primary={collection.name} />
+                          </ListItemButton>
+                        </List>
+                      ))}
+                  </Collapse>
+                </Box>
+              );
+            })}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                borderTop: 1,
+                borderColor: 'divider',
+                px: 2,
+              }}
+            >
+              <AddIcon />
+              <Button variant="text" onClick={() => setOpen(true)}>
+                New Project
+              </Button>
+            </Box>
+            <UploadForm open={open} setOpen={setOpen} />
+          </>
+        )}
+      </List>
     </Box>
   );
 };
