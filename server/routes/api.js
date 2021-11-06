@@ -55,8 +55,8 @@ const readServiceAccountKeys = async () => {
 };
 
 router.get('/test', async (req, res) => {
-  await uploadAndWriteMeta([{ filename: 'SCBKgwggSkAgEAAoIBAQCjqWovpPWHF' }]);
-  res.json({ code: 200, message: 'oksf' });
+  // await uploadAndWriteMeta([{ filename: 'SCBKgwggSkAgEAAoIBAQCjqWovpPWHF' }]);
+  res.json({ code: 200, data: [] });
 });
 
 router.get('/projects', async (req, res) => {
@@ -66,13 +66,16 @@ router.get('/projects', async (req, res) => {
     if (account) {
       const projectId = account.project_id;
       const collections = await listCollections(account, index === 0);
-      return { id: uuidv4(), project: projectId, collections };
+      return {
+        id: uuidv4(),
+        project: projectId,
+        collections: collections || [],
+      };
     }
     return null;
   });
   const projects = await Promise.all(projectsPromises);
 
-  console.log('projects', projects);
   res.json({ code: 200, data: projects });
   res.end();
 });
@@ -81,7 +84,7 @@ router.post('/upload', upload.array('account', 12), async (req, res) => {
   try {
     const { files } = req;
     await uploadAndWriteMeta(files);
-    res.json({ code: 200, message: 'Upload service account successfully!' });
+    res.json({ code: 200 });
     res.end();
   } catch (error) {
     res.json({ code: 500, message: error.message });

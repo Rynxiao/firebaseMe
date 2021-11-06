@@ -15,7 +15,7 @@ const HeaderTabs = () => {
   const [tabId, setTabId] = useAtom(tabIdAtom);
   const { response, fetchCollection } = useFetchCollection();
 
-  const handleChange = (id: number) => {
+  const handleChange = (id: string) => {
     setTabId(id);
   };
 

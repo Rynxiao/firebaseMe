@@ -8,34 +8,28 @@ import {
   Box,
   Button,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collections from '@mui/icons-material/Collections';
 import ListIcon from '@mui/icons-material/List';
 import AddIcon from '@mui/icons-material/Add';
-import { useAtom } from 'jotai';
-import projectAtom from 'renderer/states/projects';
-import { get } from 'lodash';
-import { addTabAtom, tabIdAtom } from 'renderer/states/tabs';
 import { Collection } from 'renderer/states/types';
+import useSidebar from 'renderer/hooks/useSidebar';
 import UploadForm from './UploadForm';
 
 const Sidebar = () => {
-  const [projects] = useAtom(projectAtom);
-  const [, addTab] = useAtom(addTabAtom);
-  const [, setTabId] = useAtom(tabIdAtom);
-  const [projectId, setProjectId] = React.useState(get(projects, '0.id'));
-  const [collectionId, setCollectionId] = React.useState(
-    get(projects, '0.collections.0.id')
-  );
-  const [open, setOpen] = React.useState(true);
-
-  useEffect(() => {
-    const initialCollection = get(projects, '0.collections.0');
-    addTab(initialCollection);
-    setTabId(initialCollection.id);
-  }, [addTab, projects, setTabId]);
+  const {
+    open,
+    setOpen,
+    projects,
+    setCollectionId,
+    addTab,
+    setTabId,
+    projectId,
+    setProjectId,
+    collectionId,
+  } = useSidebar();
 
   const handleClickCollection = (collection: Collection) => {
     setCollectionId(collection.id);
@@ -73,24 +67,25 @@ const Sidebar = () => {
                 timeout="auto"
                 unmountOnExit
               >
-                {collections.map((collection) => (
-                  <List component="div" disablePadding key={collection.id}>
-                    <ListItemButton
-                      sx={{ pl: 4 }}
-                      selected={collectionId === collection.id}
-                      onClick={() =>
-                        handleClickCollection(
-                          collection as unknown as Collection
-                        )
-                      }
-                    >
-                      <ListItemIcon>
-                        <Collections />
-                      </ListItemIcon>
-                      <ListItemText primary={collection.name} />
-                    </ListItemButton>
-                  </List>
-                ))}
+                {collections &&
+                  collections.map((collection) => (
+                    <List component="div" disablePadding key={collection.id}>
+                      <ListItemButton
+                        sx={{ pl: 4 }}
+                        selected={collectionId === collection.id}
+                        onClick={() =>
+                          handleClickCollection(
+                            collection as unknown as Collection
+                          )
+                        }
+                      >
+                        <ListItemIcon>
+                          <Collections />
+                        </ListItemIcon>
+                        <ListItemText primary={collection.name} />
+                      </ListItemButton>
+                    </List>
+                  ))}
               </Collapse>
             </Box>
           );

@@ -3,8 +3,8 @@ import * as React from 'react';
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  tabId: number;
-  selectedTabId: number;
+  tabId: string;
+  selectedTabId: string;
 }
 
 const TabPanel = (props: TabPanelProps) => {

@@ -3,12 +3,12 @@ export interface Indentity {
 }
 
 export interface Collection {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Project {
-  id: number;
+  id: string;
   project: string;
   collections: [Collection];
 }
@@ -36,4 +36,10 @@ export interface Entites {
 export interface EntitiesItem {
   key: string;
   data: ResponseData<EntityList>;
+}
+
+export interface AxiosResponseData<T> {
+  code: number;
+  data: T;
+  message?: string;
 }
