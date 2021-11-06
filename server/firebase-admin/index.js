@@ -2,8 +2,15 @@
 const admin = require('firebase-admin');
 const { v4: uuidv4 } = require('uuid');
 
+const firestores = {};
+
 const getDatabase = (serviceAccountKey, isDefault) => {
   const projectId = serviceAccountKey.project_id;
+
+  if (firestores[projectId]) {
+    return firestores[projectId];
+  }
+
   const config = {
     credential: admin.credential.cert(serviceAccountKey),
     databaseURL: `https://${projectId}-default-rtdb.firebaseio.com`,
@@ -14,7 +21,10 @@ const getDatabase = (serviceAccountKey, isDefault) => {
   } else {
     admin.initializeApp(config, projectId);
   }
-  return admin.firestore();
+
+  const firestore = admin.firestore();
+  firestores[projectId] = firestore;
+  return firestore;
 };
 
 const listCollections = async (serviceAccountKey, isDefault) => {
