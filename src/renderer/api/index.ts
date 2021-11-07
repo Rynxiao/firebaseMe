@@ -1,4 +1,4 @@
-import { AxiosResponseData, Project } from '../../src/renderer/states/types';
+import { AxiosResponseData, Project } from '../states/types';
 import request from './request';
 
 export const getProjects = () => {

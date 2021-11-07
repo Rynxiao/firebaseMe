@@ -11,7 +11,7 @@ import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Link from '@mui/material/Link';
-import axios from 'axios';
+import { uploadServiceAccount } from 'renderer/api';
 
 export interface UploadFormProps {
   open: boolean;
@@ -43,14 +43,7 @@ const UploadForm = (props: UploadFormProps) => {
       const formData = new FormData();
       formData.append('account', accountFile);
 
-      await axios({
-        method: 'post',
-        url: 'http://localhost:3000/api/upload',
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await uploadServiceAccount(formData);
     }
   };
 

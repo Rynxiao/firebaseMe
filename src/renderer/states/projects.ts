@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { isEmpty } from 'lodash';
-import { getProjects } from '../../../server/api';
+import { getProjects } from 'renderer/api';
 import { Project, ResponseData } from './types';
 
 // const mockedProjects = [
