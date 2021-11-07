@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { getProjects, getAllDocuments } = require('../firebase-admin');
 const { uploadAndWriteMeta } = require('../services');
+const logger = require('../utils/logger');
 
 const root = path.resolve(__dirname, '..');
 const accountsPath = path.resolve(root, 'accounts');
@@ -35,6 +36,7 @@ router.get('/documents', async (req, res) => {
     const projectId = req.query.projectId;
     const collectionPath = req.query.path;
     const documents = await getAllDocuments(collectionPath, projectId);
+    logger.info(`Get documents of ${projectId}`);
 
     if (documents) {
       res.json({ code: 200, data: documents });

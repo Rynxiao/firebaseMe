@@ -2,6 +2,7 @@
 const admin = require('firebase-admin');
 const { map, keys } = require('lodash');
 const { v4: uuidv4 } = require('uuid');
+const logger = require('../utils/logger');
 
 const firestores = {};
 
@@ -33,8 +34,6 @@ const getProject = async (projectId) => {
   const snapshots = await db.listCollections();
   const collections = snapshots.map((snapshot) => {
     const { path } = snapshot;
-
-    console.log('path', path);
     return { id: uuidv4(), name: path };
   });
 
@@ -54,8 +53,8 @@ const getProjects = async () => {
       })
     );
   } catch (error) {
-    console.log('list collections error', error);
-    return null;
+    logger.error('Get projects error', error);
+    throw new Error(error.message);
   }
 };
 
@@ -64,17 +63,26 @@ const getAllDocuments = async (path, projectId) => {
     const db = firestores[projectId];
     const collectionRef = db.collection(path);
     const documentRefs = await collectionRef.listDocuments();
-    const documentSnapshots = await db.getAll(...documentRefs);
+    const length = documentRefs.length;
 
-    return documentSnapshots.map((documentSnapshot) => {
-      if (documentSnapshot.exists) {
-        return { id: documentSnapshot.id, ...documentSnapshot.data() };
-      }
-      return {};
-    });
+    logger.info(
+      `Find document refs of project ${projectId}, length: ${length}`
+    );
+
+    if (length > 0) {
+      const documentSnapshots = await db.getAll(...documentRefs);
+
+      return documentSnapshots.map((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          return { id: documentSnapshot.id, ...documentSnapshot.data() };
+        }
+        return {};
+      });
+    }
+    return [];
   } catch (error) {
-    console.log('list documents error', error);
-    return null;
+    logger.error('List documents error', error);
+    throw new Error(error.message);
   }
 };
 
