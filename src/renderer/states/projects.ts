@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { isEmpty } from 'lodash';
 import { getProjects } from '../../../server/api';
 import { Project, ResponseData } from './types';
 
@@ -49,11 +50,14 @@ const projectAtom = atom<ResponseData<Project[]>>({ loading: false, data: [] });
 
 export const fetchProjectAtom = atom<ResponseData<Project[]>, undefined>(
   (get) => get(projectAtom),
-  async (_get, set) => {
-    set(projectAtom, { loading: true, data: [] });
-    const response = await getProjects();
-    const projects = response.data.data;
-    set(projectAtom, { loading: false, data: projects });
+  async (get, set) => {
+    const projects = get(projectAtom);
+    if (isEmpty(projects.data)) {
+      set(projectAtom, { loading: true, data: [] });
+      const response = await getProjects();
+      const projectsResponse = response.data.data;
+      set(projectAtom, { loading: false, data: projectsResponse });
+    }
   }
 );
 

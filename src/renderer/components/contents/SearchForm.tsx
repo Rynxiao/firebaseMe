@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Grid, Paper } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 export interface SearchFormProps {
   defaultPath: string;
@@ -31,7 +31,7 @@ const SearchFrom = (props: SearchFormProps) => {
               onChange={handlePathChange}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <Box
               component="div"
               sx={{
@@ -39,15 +39,15 @@ const SearchFrom = (props: SearchFormProps) => {
                 height: 1,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                ml: 1,
               }}
             >
               <Button
                 variant="contained"
-                endIcon={<SearchIcon />}
+                endIcon={<TelegramIcon />}
                 onClick={() => onSearch(path)}
               >
-                Search
+                Go
               </Button>
             </Box>
           </Grid>
