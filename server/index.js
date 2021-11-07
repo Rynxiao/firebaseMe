@@ -1,6 +1,7 @@
 const debug = require('debug')('server:server');
 const http = require('http');
 const app = require('./app');
+const { initialApps } = require('./services');
 
 const server = http.createServer(app);
 
@@ -47,6 +48,9 @@ function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
+
+  // initial fireabse dbs
+  initialApps();
 }
 
 const port = normalizePort(process.env.PORT || '3000');
