@@ -20,7 +20,7 @@ const TabPanel = (props: TabPanelProps) => {
   const { loading } = useSidebar();
 
   const handleFormSearch = async (searchPath: string) => {
-    await fetchCollection(searchPath);
+    await fetchCollection(searchPath, '123');
   };
 
   const columns = generateGridColumns(response.data);
