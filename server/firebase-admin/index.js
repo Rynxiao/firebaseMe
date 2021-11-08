@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 const { map, keys } = require('lodash');
 const { v4: uuidv4 } = require('uuid');
 const logger = require('../utils/logger');
+const { getTimestamps } = require('./utils');
 
 const firestores = {};
 
@@ -58,7 +59,7 @@ const getProjects = async () => {
   }
 };
 
-const getAllDocuments = async (path, projectId) => {
+const getCollectionDocuments = async (path, projectId) => {
   try {
     const db = firestores[projectId];
     const collectionRef = db.collection(path);
@@ -74,7 +75,7 @@ const getAllDocuments = async (path, projectId) => {
 
       return documentSnapshots.map((documentSnapshot) => {
         if (documentSnapshot.exists) {
-          return { id: documentSnapshot.id, ...documentSnapshot.data() };
+          return { docId: documentSnapshot.id, ...documentSnapshot.data() };
         }
         return {};
       });
@@ -86,8 +87,46 @@ const getAllDocuments = async (path, projectId) => {
   }
 };
 
+const getDocumentCollections = async (docPath, projectId) => {
+  try {
+    const db = firestores[projectId];
+    const documentRef = db.doc(docPath);
+    const subCollections = await documentRef.listCollections();
+
+    return map(subCollections, (subCollection) => subCollection.id);
+  } catch (error) {
+    logger.error(`List sub collections of ${docPath} error`, error);
+    throw new Error(error.message);
+  }
+};
+
+const getDocument = async (docPath, projectId) => {
+  try {
+    const db = firestores[projectId];
+    const documentRef = db.doc(docPath);
+    const documentSnapshot = await documentRef.get();
+
+    if (documentSnapshot.exists) {
+      const id = documentSnapshot.id;
+      const data = documentSnapshot.data();
+      const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
+      const docData = { ...data, docId: id, lastUpdateTime };
+      logger.info('documentSnapshot id', documentSnapshot.id);
+      logger.info('documentSnapshot data', docData);
+      return docData;
+    }
+
+    return null;
+  } catch (error) {
+    logger.error(`Get document ${docPath} error`, error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   initialDatabases,
   getProjects,
-  getAllDocuments,
+  getCollectionDocuments,
+  getDocumentCollections,
+  getDocument,
 };

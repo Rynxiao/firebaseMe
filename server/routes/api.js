@@ -1,7 +1,11 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { getProjects, getAllDocuments } = require('../firebase-admin');
+const {
+  getProjects,
+  getCollectionDocuments,
+  getDocument,
+} = require('../firebase-admin');
 const { uploadAndWriteMeta } = require('../services');
 const logger = require('../utils/logger');
 
@@ -35,11 +39,26 @@ router.get('/documents', async (req, res) => {
   try {
     const projectId = req.query.projectId;
     const collectionPath = req.query.path;
-    const documents = await getAllDocuments(collectionPath, projectId);
+    const documents = await getCollectionDocuments(collectionPath, projectId);
     logger.info(`Get documents of ${projectId}`);
 
     if (documents) {
       res.json({ code: 200, data: documents });
+    }
+  } catch (error) {
+    res.json({ code: 500, message: error.message });
+  }
+});
+
+router.get('/document', async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const docPath = req.query.path;
+    const document = await getDocument(docPath, projectId);
+    logger.info(`Get documents of ${projectId}`);
+
+    if (document) {
+      res.json({ code: 200, data: document });
     }
   } catch (error) {
     res.json({ code: 500, message: error.message });
