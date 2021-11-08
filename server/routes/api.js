@@ -14,10 +14,6 @@ const accountsPath = path.resolve(root, 'accounts');
 const upload = multer({ dest: accountsPath });
 const router = express.Router();
 
-router.get('/ping', async (req, res) => {
-  res.json({ code: 200, data: ['living'] });
-});
-
 router.get('/projects', async (req, res) => {
   const projects = await getProjects();
   res.json({ code: 200, data: projects });

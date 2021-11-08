@@ -2,6 +2,7 @@ const path = require('path');
 const fsPromise = require('fs/promises');
 const { findIndex } = require('lodash');
 const { initialDatabases } = require('../firebase-admin');
+const logger = require('../utils/logger');
 
 const root = path.resolve(__dirname, '..');
 const metaPath = path.resolve(root, 'meta.json');
@@ -14,7 +15,7 @@ const readServiceAccountKeys = async () => {
     });
     return JSON.parse(accountMetaStr);
   } catch (error) {
-    console.log('read files error', error);
+    logger.error(`Read meta file ${metaPath} error`, error);
     return null;
   }
 };
@@ -45,18 +46,21 @@ const uploadAndWriteMeta = async (files) => {
       }
     });
   } catch (error) {
-    console.log('rename error', error);
+    logger.error(`Upload and write meta ${metaPath} error`, error);
+    throw new Error(error.message);
   }
 };
 
 const initialApps = async () => {
   const accounts = await readServiceAccountKeys();
 
-  accounts.map(async (account, index) => {
-    if (account) {
-      initialDatabases(account, index === 0);
-    }
-  });
+  if (accounts) {
+    accounts.map(async (account, index) => {
+      if (account) {
+        initialDatabases(account, index === 0);
+      }
+    });
+  }
 };
 
 module.exports = {
