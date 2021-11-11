@@ -5,6 +5,7 @@ const {
   getProjects,
   getCollectionDocuments,
   getDocument,
+  getDocumentCollections,
 } = require('../firebase-admin');
 const { uploadAndWriteMeta } = require('../services');
 const logger = require('../utils/logger');
@@ -55,6 +56,21 @@ router.get('/document', async (req, res) => {
 
     if (document) {
       res.json({ code: 200, data: document });
+    }
+  } catch (error) {
+    res.json({ code: 500, message: error.message });
+  }
+});
+
+router.get('/collections', async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const docPath = req.query.path;
+    const collections = await getDocumentCollections(docPath, projectId);
+    logger.info(`Get collections of document ${projectId}-${docPath}`);
+
+    if (collections) {
+      res.json({ code: 200, data: collections });
     }
   } catch (error) {
     res.json({ code: 500, message: error.message });
