@@ -75,7 +75,14 @@ const getCollectionDocuments = async (path, projectId) => {
 
       return documentSnapshots.map((documentSnapshot) => {
         if (documentSnapshot.exists) {
-          return { docId: documentSnapshot.id, ...documentSnapshot.data() };
+          const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
+          const createTime = getTimestamps(documentSnapshot.createTime);
+          return {
+            docId: documentSnapshot.id,
+            ...documentSnapshot.data(),
+            lastUpdateTime,
+            createTime,
+          };
         }
         return {};
       });
@@ -110,7 +117,8 @@ const getDocument = async (docPath, projectId) => {
       const id = documentSnapshot.id;
       const data = documentSnapshot.data();
       const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
-      const docData = { ...data, docId: id, lastUpdateTime };
+      const createTime = getTimestamps(documentSnapshot.createTime);
+      const docData = { ...data, docId: id, lastUpdateTime, createTime };
       logger.info('documentSnapshot id', documentSnapshot.id);
       logger.info('documentSnapshot data', docData);
       return docData;
