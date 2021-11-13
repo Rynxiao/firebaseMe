@@ -26,16 +26,14 @@ const Sidebar = () => {
     setOpen,
     projects,
     loading,
-    setCollectionId,
     addTab,
     setTabId,
     projectId,
     setProjectId,
-    collectionId,
+    tabId,
   } = useSidebar();
 
   const handleClickCollection = (collection: Collection) => {
-    setCollectionId(collection.id);
     addTab(collection);
     setTabId(collection.id);
   };
@@ -106,7 +104,7 @@ const Sidebar = () => {
                         >
                           <ListItemButton
                             sx={{ pl: 4 }}
-                            selected={collectionId === collection.id}
+                            selected={tabId === collection.id}
                             onClick={() =>
                               handleClickCollection(
                                 collection as unknown as Collection

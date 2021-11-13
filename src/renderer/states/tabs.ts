@@ -3,7 +3,7 @@ import { Collection } from 'renderer/states/types';
 import { find, remove } from 'lodash';
 
 export const tabsAtom = atom<Collection[]>([]);
-export const tabIdAtom = atom('-1');
+export const tabIdAtom = atom('');
 
 export const addTabAtom = atom<Collection[], Collection>(
   (get) => get(tabsAtom),

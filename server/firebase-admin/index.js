@@ -78,7 +78,7 @@ const getCollectionDocuments = async (path, projectId) => {
           const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
           const createTime = getTimestamps(documentSnapshot.createTime);
           return {
-            docId: documentSnapshot.id,
+            id: documentSnapshot.id,
             ...documentSnapshot.data(),
             lastUpdateTime,
             createTime,
@@ -118,7 +118,7 @@ const getDocument = async (docPath, projectId) => {
       const data = documentSnapshot.data();
       const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
       const createTime = getTimestamps(documentSnapshot.createTime);
-      const docData = { ...data, docId: id, lastUpdateTime, createTime };
+      const docData = { ...data, id, lastUpdateTime, createTime };
       logger.info('documentSnapshot id', documentSnapshot.id);
       logger.info('documentSnapshot data', docData);
       return docData;

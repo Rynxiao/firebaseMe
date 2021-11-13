@@ -4,21 +4,46 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TabPanel from 'renderer/components/contents/TabPanel';
 import { useAtom } from 'jotai';
-import { tabIdAtom, tabsAtom } from 'renderer/states/tabs';
+import { tabsAtom } from 'renderer/states/tabs';
+import useSidebar from 'renderer/hooks/useSidebar';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 const HeaderTabs = () => {
   const [tabs] = useAtom(tabsAtom);
-  const [tabId, setTabId] = useAtom(tabIdAtom);
+  const { loading, tabId, setTabId } = useSidebar();
+
+  console.log('HeaderTabs', loading);
+  console.log('tabs', tabs);
+  console.log('tabId', tabId);
 
   const handleChange = (id: string) => {
     setTabId(id);
   };
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          width: 1,
+          height: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress size={20} />
+        <Typography sx={{ mt: 0.25 }}>Loading Contents</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
-        width: '100%',
-        height: '100%',
+        width: 1,
+        height: 1,
         display: 'grid',
         gridAutoRows: '49px 1fr',
       }}
