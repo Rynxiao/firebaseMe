@@ -7,6 +7,7 @@ import { Collection } from 'renderer/states/types';
 import { useAtom } from 'jotai';
 import { projectNameAtom } from 'renderer/states/projects';
 import SearchFrom from './SearchForm';
+import TableLoadingOverlay from '../TableLoadingOverlay';
 
 interface TabPanelProps {
   tab: Collection;
@@ -18,14 +19,13 @@ const TabPanel = (props: TabPanelProps) => {
   const { response, fetchCollection } = useFetchCollection();
   const [projectName] = useAtom(projectNameAtom);
 
+  const { loading, data } = response;
+
   const handleFormSearch = async (searchPath: string) => {
     await fetchCollection(searchPath, projectName);
   };
 
-  const columns = React.useMemo(
-    () => generateGridColumns(response.data),
-    [response.data]
-  );
+  const columns = React.useMemo(() => generateGridColumns(data), [data]);
 
   const handleEditRowsModelChange = React.useCallback(
     (model: GridEditRowsModel) => {
@@ -50,7 +50,9 @@ const TabPanel = (props: TabPanelProps) => {
             rowsPerPageOptions={[20]}
             components={{
               Toolbar: GridToolbar,
+              LoadingOverlay: TableLoadingOverlay,
             }}
+            loading={loading}
             onEditRowsModelChange={handleEditRowsModelChange}
           />
         </Box>

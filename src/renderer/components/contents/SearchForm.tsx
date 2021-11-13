@@ -17,6 +17,12 @@ const SearchFrom = (props: SearchFormProps) => {
     setPath(event.target.value);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === 13) {
+      onSearch(path);
+    }
+  };
+
   return (
     <Paper>
       <Box sx={{ maxWidth: '100%' }}>
@@ -29,6 +35,7 @@ const SearchFrom = (props: SearchFormProps) => {
               margin="dense"
               value={path}
               onChange={handlePathChange}
+              onKeyDown={handleKeyDown}
             />
           </Grid>
           <Grid item xs={2}>
