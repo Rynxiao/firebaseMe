@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Grid, Paper } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
 
 export interface SearchFormProps {
@@ -24,43 +24,41 @@ const SearchFrom = (props: SearchFormProps) => {
   };
 
   return (
-    <Paper>
-      <Box sx={{ maxWidth: '100%' }}>
-        <Grid container>
-          <Grid item xs={10}>
-            <TextField
-              fullWidth
-              label="Path"
-              size="small"
-              margin="dense"
-              value={path}
-              onChange={handlePathChange}
-              onKeyDown={handleKeyDown}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Box
-              component="div"
-              sx={{
-                width: 1,
-                height: 1,
-                display: 'flex',
-                alignItems: 'center',
-                ml: 1,
-              }}
-            >
-              <Button
-                variant="contained"
-                endIcon={<TelegramIcon />}
-                onClick={() => onSearch(path)}
-              >
-                Go
-              </Button>
-            </Box>
-          </Grid>
+    <Box sx={{ maxWidth: 1 }}>
+      <Grid container>
+        <Grid item xs={10}>
+          <TextField
+            fullWidth
+            label="Path"
+            size="small"
+            margin="dense"
+            value={path}
+            onChange={handlePathChange}
+            onKeyDown={handleKeyDown}
+          />
         </Grid>
-      </Box>
-    </Paper>
+        <Grid item xs={2}>
+          <Box
+            component="div"
+            sx={{
+              width: 1,
+              height: 1,
+              display: 'flex',
+              alignItems: 'center',
+              ml: 1,
+            }}
+          >
+            <Button
+              variant="contained"
+              endIcon={<TelegramIcon />}
+              onClick={() => onSearch(path)}
+            >
+              Go
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

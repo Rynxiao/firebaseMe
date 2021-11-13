@@ -8,6 +8,7 @@ import {
   upperFirst,
   isNumber,
   isDate,
+  keysIn,
 } from 'lodash';
 import {
   GridColDef,
@@ -36,8 +37,11 @@ const ID = 'id';
 const LAST_UPDATE_TIME = 'lastUpdateTime';
 const CREATE_TIME = 'createTime';
 
+// eslint-disable-next-line no-underscore-dangle
+const isDateLike = (value: any) => !!value._seconds;
+
 const getType = (value: any) => {
-  if (isDate(value)) {
+  if (isDate(value) || isDateLike(value)) {
     return 'date';
   }
 
@@ -49,11 +53,14 @@ const getType = (value: any) => {
 };
 
 const generateCol = (key: string, value: any) => {
+  const type = getType(value);
+
   const col = {
     field: key,
     headerName: upperFirst(camelCase(key)),
-    type: getType(value),
+    type,
     editable: true,
+    valueGetter: type === 'date' ? dateGetter : null,
   } as GridColDef;
 
   if (key === ID) {

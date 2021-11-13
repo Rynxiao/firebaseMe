@@ -46,7 +46,7 @@ const TabPanel = (props: TabPanelProps) => {
           <DataGrid
             rows={response.data}
             columns={columns}
-            pageSize={5}
+            pageSize={20}
             rowsPerPageOptions={[20]}
             components={{
               Toolbar: GridToolbar,
