@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import useFetchCollection from 'renderer/hooks/useFetchCollection';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridEditRowsModel, GridToolbar } from '@mui/x-data-grid';
 import { generateGridColumns } from 'renderer/utils/grid';
 import { Collection } from 'renderer/states/types';
 import { useAtom } from 'jotai';
@@ -22,7 +22,17 @@ const TabPanel = (props: TabPanelProps) => {
     await fetchCollection(searchPath, projectName);
   };
 
-  const columns = generateGridColumns(response.data);
+  const columns = React.useMemo(
+    () => generateGridColumns(response.data),
+    [response.data]
+  );
+
+  const handleEditRowsModelChange = React.useCallback(
+    (model: GridEditRowsModel) => {
+      console.log(model);
+    },
+    []
+  );
 
   return (
     <Box
@@ -37,11 +47,11 @@ const TabPanel = (props: TabPanelProps) => {
             rows={response.data}
             columns={columns}
             pageSize={5}
-            rowsPerPageOptions={[5]}
-            disableSelectionOnClick
+            rowsPerPageOptions={[20]}
             components={{
               Toolbar: GridToolbar,
             }}
+            onEditRowsModelChange={handleEditRowsModelChange}
           />
         </Box>
       </Box>

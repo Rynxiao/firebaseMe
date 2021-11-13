@@ -13,10 +13,6 @@ const HeaderTabs = () => {
   const [tabs] = useAtom(tabsAtom);
   const { loading, tabId, setTabId } = useSidebar();
 
-  console.log('HeaderTabs', loading);
-  console.log('tabs', tabs);
-  console.log('tabId', tabId);
-
   const handleChange = (id: string) => {
     setTabId(id);
   };
