@@ -26,3 +26,11 @@ export const getDocuments = (collectionPath: string, projectId: string) => {
     method: 'get',
   });
 };
+
+export const getDocument = (docPath: string, projectId: string) => {
+  return request<Entity>({
+    url: 'document',
+    params: { path: docPath, projectId },
+    method: 'get',
+  });
+};

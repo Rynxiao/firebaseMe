@@ -118,7 +118,7 @@ const getDocument = async (docPath, projectId) => {
       const data = documentSnapshot.data();
       const lastUpdateTime = getTimestamps(documentSnapshot.updateTime);
       const createTime = getTimestamps(documentSnapshot.createTime);
-      const docData = { ...data, id, lastUpdateTime, createTime };
+      const docData = { id, ...data, lastUpdateTime, createTime };
       logger.info('documentSnapshot id', documentSnapshot.id);
       logger.info('documentSnapshot data', docData);
       return docData;
